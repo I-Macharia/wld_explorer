@@ -20,24 +20,24 @@
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white">
+<body class="bg-white text-black">
     <div class="container mx-auto p-6">
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-blue-500">Worldcoin Token Transaction Registry</h1>
-            <p class="text-lg text-gray-400">Real-time tracking of all Worldcoin token transactions</p>
+            <h1 class="text-4xl font-bold text-blue-600">Worldcoin Token Transaction Registry</h1>
+            <p class="text-lg text-gray-600">Real-time tracking of all Worldcoin token transactions</p>
         </div>
         <div class="mb-8">
-            <input id="search-input" type="text" placeholder="Enter transaction hash or wallet address" class="w-full p-2 rounded bg-gray-800 text-white">
-            <button id="search-button" class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button>
+            <input id="search-input" type="text" placeholder="Enter transaction hash or wallet address" class="w-full p-2 rounded bg-gray-200 text-black">
+            <button id="search-button" class="mt-2 bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">Search</button>
         </div>
         <div class="slideshow-container" id="slideshow-container">
             <!-- Slides will be dynamically inserted here -->
         </div>
         <div class="text-center mt-4">
-            <button class="first bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">First</button>
-            <button class="prev bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Previous</button>
-            <button class="next bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next</button>
-            <button class="last bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Last</button>
+            <button class="first bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">First</button>
+            <button class="prev bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">Previous</button>
+            <button class="next bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">Next</button>
+            <button class="last bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">Last</button>
         </div>
     </div>
     <script>
@@ -81,50 +81,50 @@
 
         const createSlide = (item) => {
             const slide = document.createElement('div');
-            slide.className = 'slide bg-gray-800 p-6 rounded-lg shadow-lg';
+            slide.className = 'slide bg-gray-100 p-6 rounded-lg shadow-lg';
 
             slide.innerHTML = `
-                <h2 class="text-xl font-bold text-blue-500 mb-4">Transfer ID: ${item.id} <i class="fas fa-external-link-alt"></i></h2>
+                <h2 class="text-xl font-bold text-blue-600 mb-4">Transfer ID: ${item.id} <i class="fas fa-external-link-alt"></i></h2>
                 <div class="mb-4">
-                    <p class="text-gray-400">From</p>
-                    <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                    <p class="text-gray-600">From</p>
+                    <div class="flex items-center justify-between bg-gray-200 p-2 rounded">
                         <span class="truncate">${item.from}</span>
-                        <button class="text-gray-400 hover:text-white copy-btn" data-copy="${item.from}"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="text-gray-600 hover:text-black copy-btn" data-copy="${item.from}"><i class="fas fa-copy"></i> Copy</button>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <p class="text-gray-400">To</p>
-                    <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                    <p class="text-gray-600">To</p>
+                    <div class="flex items-center justify-between bg-gray-200 p-2 rounded">
                         <span class="truncate">${item.to}</span>
-                        <button class="text-gray-400 hover:text-white copy-btn" data-copy="${item.to}"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="text-gray-600 hover:text-black copy-btn" data-copy="${item.to}"><i class="fas fa-copy"></i> Copy</button>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <p class="text-gray-400">Value</p>
-                    <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                    <p class="text-gray-600">Value</p>
+                    <div class="flex items-center justify-between bg-gray-200 p-2 rounded">
                         <span>${weiToEther(item.value)} ETH</span>
-                        <button class="text-gray-400 hover:text-white copy-btn" data-copy="${weiToEther(item.value)} ETH"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="text-gray-600 hover:text-black copy-btn" data-copy="${weiToEther(item.value)} ETH"><i class="fas fa-copy"></i> Copy</button>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <p class="text-gray-400">Transaction Hash</p>
-                    <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                    <p class="text-gray-600">Transaction Hash</p>
+                    <div class="flex items-center justify-between bg-gray-200 p-2 rounded">
                         <span class="truncate">${item.transactionHash}</span>
-                        <button class="text-gray-400 hover:text-white copy-btn" data-copy="${item.transactionHash}"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="text-gray-600 hover:text-black copy-btn" data-copy="${item.transactionHash}"><i class="fas fa-copy"></i> Copy</button>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <p class="text-gray-400">Block Timestamp</p>
-                    <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                    <p class="text-gray-600">Block Timestamp</p>
+                    <div class="flex items-center justify-between bg-gray-200 p-2 rounded">
                         <span>${new Date(item.blockTimestamp * 1000).toLocaleString()}</span>
-                        <button class="text-gray-400 hover:text-white copy-btn" data-copy="${new Date(item.blockTimestamp * 1000).toLocaleString()}"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="text-gray-600 hover:text-black copy-btn" data-copy="${new Date(item.blockTimestamp * 1000).toLocaleString()}"><i class="fas fa-copy"></i> Copy</button>
                     </div>
                 </div>
                 <div>
-                    <p class="text-gray-400">Block Number</p>
-                    <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                    <p class="text-gray-600">Block Number</p>
+                    <div class="flex items-center justify-between bg-gray-200 p-2 rounded">
                         <span>${item.blockNumber}</span>
-                        <button class="text-gray-400 hover:text-white copy-btn" data-copy="${item.blockNumber}"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="text-gray-600 hover:text-black copy-btn" data-copy="${item.blockNumber}"><i class="fas fa-copy"></i> Copy</button>
                     </div>
                 </div>
             `;
