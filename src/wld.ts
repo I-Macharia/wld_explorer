@@ -88,7 +88,7 @@ export function handleTokenUpdated(event: TokenUpdatedEvent): void {
   entity.newToken = event.params.newToken
   entity.name = event.params.name
   entity.symbol = event.params.symbol
-  entity.existingHolders = event.params.existingHolders
+  entity.existingHolders = event.params.existingHolders.map<Address>((address) => address.toBytes());
   entity.existingsAmounts = event.params.existingsAmounts
   entity.inflationCapPeriod = event.params.inflationCapPeriod
   entity.inflationCapWad = event.params.inflationCapWad
@@ -106,7 +106,7 @@ export function handleTokensMinted(event: TokensMintedEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.minter = event.params.minter
-  entity.newHolders = event.params.newHolders
+  entity.newHolders = event.params.newHolders.map<Address>((address) => address.toBytes());
   entity.newAmounts = event.params.newAmounts
 
   entity.blockNumber = event.block.number
