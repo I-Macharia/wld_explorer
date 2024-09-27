@@ -1,0 +1,212 @@
+<html>
+<head>
+    <title>ENS Registry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .slide {
+            display: none;
+            width: 100%;
+        }
+        .active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto p-6">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-blue-500">ENS Registry</h1>
+            <p class="text-lg text-gray-400">Real-time tracking of new ENS domain registrations</p>
+        </div>
+        <div class="mb-8">
+            <input id="search-input" type="text" placeholder="Enter transaction hash or wallet address" class="w-full p-2 rounded bg-gray-800 text-white">
+            <button id="search-button" class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button>
+        </div>
+        <div class="slideshow-container" id="slideshow-container">
+            <!-- Slides will be dynamically inserted here -->
+        </div>
+        <div class="text-center mt-4">
+            <button class="first bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">First</button>
+            <button class="prev bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Previous</button>
+            <button class="next bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next</button>
+            <button class="last bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Last</button>
+        </div>
+    </div>
+    <script>
+        const apiUrl = 'https://api.studio.thegraph.com/query/90222/wld_explorer/version/latest';
+        const defaultQuery = `
+            {
+                transfers(orderBy: blockNumber, orderDirection: asc) {
+                    id
+                    from
+                    to
+                    value
+                    transactionHash
+                    blockTimestamp
+                    blockNumber
+                }
+            }
+        `;
+        let slideIndex = 0;
+        let slidesData = [];
+
+        const fetchData = async (customQuery = defaultQuery) => {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query: customQuery })
+                });
+                const data = await response.json();
+                return data.data.transfers; // Adjust this based on the actual structure of the API response
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                return [];
+            }
+        };
+
+        const weiToEther = (wei) => {
+            return (wei / 1e18).toFixed(4); // Convert wei to Ether and format to 4 decimal places
+        };
+
+        const createSlide = (item) => {
+            const slide = document.createElement('div');
+            slide.className = 'slide bg-gray-800 p-6 rounded-lg shadow-lg';
+
+            slide.innerHTML = `
+                <h2 class="text-xl font-bold text-blue-500 mb-4">Transfer ID: ${item.id} <i class="fas fa-external-link-alt"></i></h2>
+                <div class="mb-4">
+                    <p class="text-gray-400">From</p>
+                    <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                        <span class="truncate">${item.from}</span>
+                        <button class="text-gray-400 hover:text-white copy-btn" data-copy="${item.from}"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <p class="text-gray-400">To</p>
+                    <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                        <span class="truncate">${item.to}</span>
+                        <button class="text-gray-400 hover:text-white copy-btn" data-copy="${item.to}"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <p class="text-gray-400">Value</p>
+                    <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                        <span>${weiToEther(item.value)} ETH</span>
+                        <button class="text-gray-400 hover:text-white copy-btn" data-copy="${weiToEther(item.value)} ETH"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <p class="text-gray-400">Transaction Hash</p>
+                    <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                        <span class="truncate">${item.transactionHash}</span>
+                        <button class="text-gray-400 hover:text-white copy-btn" data-copy="${item.transactionHash}"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <p class="text-gray-400">Block Timestamp</p>
+                    <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                        <span>${new Date(item.blockTimestamp * 1000).toLocaleString()}</span>
+                        <button class="text-gray-400 hover:text-white copy-btn" data-copy="${new Date(item.blockTimestamp * 1000).toLocaleString()}"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-gray-400">Block Number</p>
+                    <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                        <span>${item.blockNumber}</span>
+                        <button class="text-gray-400 hover:text-white copy-btn" data-copy="${item.blockNumber}"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+            `;
+
+            return slide;
+        };
+
+        const showSlide = (index) => {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+        };
+
+        const initSlideshow = async (customQuery = defaultQuery) => {
+            slidesData = await fetchData(customQuery);
+            const slideshowContainer = document.getElementById('slideshow-container');
+            slideshowContainer.innerHTML = ''; // Clear existing slides
+
+            slidesData.forEach(item => {
+                const slide = createSlide(item);
+                slideshowContainer.appendChild(slide);
+            });
+
+            slideIndex = 0; // Reset to the first slide
+            showSlide(slideIndex);
+
+            document.querySelector('.first').addEventListener('click', () => {
+                slideIndex = 0;
+                showSlide(slideIndex);
+            });
+
+            document.querySelector('.prev').addEventListener('click', () => {
+                slideIndex = (slideIndex > 0) ? slideIndex - 1 : slidesData.length - 1;
+                showSlide(slideIndex);
+            });
+
+            document.querySelector('.next').addEventListener('click', () => {
+                slideIndex = (slideIndex < slidesData.length - 1) ? slideIndex + 1 : 0;
+                showSlide(slideIndex);
+            });
+
+            document.querySelector('.last').addEventListener('click', () => {
+                slideIndex = slidesData.length - 1;
+                showSlide(slideIndex);
+            });
+
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const textToCopy = button.getAttribute('data-copy');
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        alert('Copied to clipboard');
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+                });
+            });
+        };
+
+        document.getElementById('search-button').addEventListener('click', () => {
+            const searchInput = document.getElementById('search-input').value.trim();
+            if (searchInput) {
+                const customQuery = `
+                    {
+                        transfers(where: { from: "${searchInput}" } or: { to: "${searchInput}" } or: { transactionHash: "${searchInput}" }, orderBy: blockNumber, orderDirection: asc) {
+                            id
+                            from
+                            to
+                            value
+                            transactionHash
+                            blockTimestamp
+                            blockNumber
+                        }
+                    }
+                `;
+                initSlideshow(customQuery);
+            } else {
+                initSlideshow();
+            }
+        });
+
+        initSlideshow();
+    </script>
+</body>
+</html>
