@@ -1,3 +1,4 @@
+import { Address, Bytes } from '@graphprotocol/graph-ts';
 import {
   Approval as ApprovalEvent,
   InflationTokensMinted as InflationTokensMintedEvent,
@@ -84,36 +85,36 @@ export function handleOwnershipTransferred(
 export function handleTokenUpdated(event: TokenUpdatedEvent): void {
   let entity = new TokenUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.newToken = event.params.newToken
-  entity.name = event.params.name
-  entity.symbol = event.params.symbol
-  entity.existingHolders = event.params.existingHolders.map<Address>((address) => address.toBytes());
-  entity.existingsAmounts = event.params.existingsAmounts
-  entity.inflationCapPeriod = event.params.inflationCapPeriod
-  entity.inflationCapWad = event.params.inflationCapWad
-  entity.inflationLockPeriod = event.params.inflationLockPeriod
+  );
+  entity.newToken = event.params.newToken;
+  entity.name = event.params.name;
+  entity.symbol = event.params.symbol;
+  entity.existingHolders = event.params.existingHolders.map<Bytes>((address: Address) => address as Bytes);
+  entity.existingsAmounts = event.params.existingsAmounts;
+  entity.inflationCapPeriod = event.params.inflationCapPeriod;
+  entity.inflationCapWad = event.params.inflationCapWad;
+  entity.inflationLockPeriod = event.params.inflationLockPeriod;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
 
-  entity.save()
+  entity.save();
 }
 
 export function handleTokensMinted(event: TokensMintedEvent): void {
   let entity = new TokensMinted(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.minter = event.params.minter
-  entity.newHolders = event.params.newHolders.map<Address>((address) => address.toBytes());
-  entity.newAmounts = event.params.newAmounts
+  );
+  entity.minter = event.params.minter;
+  entity.newHolders = event.params.newHolders.map<Bytes>((address: Address) => address as Bytes);
+  entity.newAmounts = event.params.newAmounts;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
 
-  entity.save()
+  entity.save();
 }
 
 export function handleTransfer(event: TransferEvent): void {
