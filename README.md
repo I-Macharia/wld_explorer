@@ -49,14 +49,14 @@ This project enables users to search and view Worldcoin token transactions by co
 1. **Clone the Repository**:
    - Clone this repository to your local machine using the following command:
      ```sh
-     git clone <repository-url>
+     git clone https://github.com/I-Macharia/wld_explorer.git
      ```
-   - Replace `<repository-url>` with the URL of your GitHub repository.
+   - Replace `https://github.com/I-Macharia/wld_explorer.git` with the URL of your GitHub repository.
 
 2. **Configure the Application**:
    - Navigate to the project directory:
      ```sh
-     cd worldcoin-token-transaction-registry
+     cd WLD_EXPLORER
      ```
    - In the JavaScript code, replace the `apiUrl` with the GraphQL endpoint URL provided by The Graph Studio. The endpoint will look something like this:
      ```javascript
