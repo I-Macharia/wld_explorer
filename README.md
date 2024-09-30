@@ -2,6 +2,8 @@
 
 A frontend application for real-time tracking of all Worldcoin token transactions. This project leverages The Graph for querying on-chain data and presents the data in a user-friendly interface with a dynamic slideshow view.
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/c56ce479-e019-467b-ac14-3eff363d834c/deploy-status)](https://app.netlify.com/sites/wld-explorer/deploys)
+
 ## Table of Contents
 - [Introduction](#introduction)
 - [Features](#features)
